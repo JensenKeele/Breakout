@@ -9,11 +9,17 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene {
-    
+    var ball = SKShapeNode()
     override func didMove(to view: SKView) {
         createBackground()
         //this stuff happens once when the app opens
-    }
+        resetGame()
+        }
+    func resetGame() {
+        //happens before game starts
+        makeBall()
+}
+
     func createBackground() {
         let stars = SKTexture(imageNamed: "Stars")
         for i in 0...1 {
@@ -27,5 +33,32 @@ class GameScene: SKScene {
             let moveForever = SKAction.repeatForever(moveLoop)
             starsBackground.run(moveForever)
         }
+    }
+    
+    func makeBall() {
+        ball.removeFromParent() //remove the ball if it exists
+        ball = SKShapeNode(circleOfRadius: 10)
+        ball.position = CGPoint(x: frame.midX, y: frame.midY)
+        ball.strokeColor = .black
+        ball.fillColor = .yellow
+        ball.name = "ball"
+        
+        //physics shape matches ball shape
+        ball.physicsBody = SKPhysicsBody(circleOfRadius: 10)
+        // ignores all forces and impulses
+        ball.physicsBody?.isDynamic = false
+        //use precise collision detection
+        ball.physicsBody?.usesPreciseCollisionDetection = true
+        //no loss of energy via friction
+        ball.physicsBody?.friction = 0
+        //no gravity
+        ball.physicsBody?.affectedByGravity = false
+        //bouces off other objects w no energy loss
+        ball.physicsBody?.restitution = 1
+        //no slow down over time
+        ball.physicsBody?.linearDamping = 0
+        ball.physicsBody?.contactTestBitMask = (ball.physicsBody?.collisionBitMask)!
+        
+        addChild(ball) //adds ball to view
     }
 }
