@@ -176,7 +176,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let count = Int(frame.width) / 55
             let xOffset = (Int(frame.width) - (count * 55)) / 2 + Int(frame.minX) + 25
             let colors: [UIColor] = [.blue, .orange, .green]
-            let y = Int(frame.maxY) - 65
             for r in 0..<3 {
                 let y = Int(frame.maxY) - 65 - (r * 25)
                 for i in 0..<count {
@@ -224,4 +223,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playLabel.text = "You lose! Tap to play again"
             }
         }
+    override func update(_ currentTime: TimeInterval) {
+        if abs(ball.physicsBody!.velocity.dx) < 100 {
+            ball.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -3...3), dy: 0))
+        }
+        if abs(ball.physicsBody!.velocity.dy) < 100 {
+            ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: Int.random(in: -3...3)))
+        }
+    }
     }
